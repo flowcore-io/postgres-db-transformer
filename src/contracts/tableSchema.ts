@@ -1,6 +1,8 @@
 export type TableSchema = {
-  [key: string]: {
-    type: string;
-    mapFrom?: string;
-  }
+  [key: string]: ColumnDefinition
+}
+
+export type ColumnDefinition = {
+  type: string;
+  mapFrom?: string;
 }
