@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.0.1...v1.1.0) (2024-04-02)
+
+
+### Features
+
+* added mapFrom schema feature, and additional types ([55fd704](https://github.com/flowcore-io/postgres-db-transformer/commit/55fd7045c07145717bb399b51154ebed1b972c2f))
+
+
+### Bug Fixes
+
+* removed cluttering console log ([a335570](https://github.com/flowcore-io/postgres-db-transformer/commit/a335570ca2d29c4676f61d8c7ab7f9bb4b7d08bf))
+* table is now being dropped properly when flag CLEAR_TABLE_ON_START is true ([44585b1](https://github.com/flowcore-io/postgres-db-transformer/commit/44585b10cddf8a5985dc799c089440fa3a0d7008))
+* using json type for objs when schema is not defined ([a850e3f](https://github.com/flowcore-io/postgres-db-transformer/commit/a850e3fe3e0169f80b6102f89b74f506c836d61f))
+
 ## [1.0.1](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.0.0...v1.0.1) (2024-04-02)
 
 
