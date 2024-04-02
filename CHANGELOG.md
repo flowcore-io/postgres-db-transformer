@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0 (2024-04-02)
+
+
+### Features
+
+* added a dynamic pg table generation and insertion ([a54d1c2](https://github.com/flowcore-io/postgres-db-transformer/commit/a54d1c2e9a0c8cce0176e9f40af8dc9e6a07622d))
+
 ## [2.0.0](https://github.com/flowcore-io/nodejs-typescript-transformer-example/compare/v1.3.1...v2.0.0) (2023-10-24)
 
 
