@@ -12,9 +12,9 @@ const CLEAR_TABLE_ON_START = env.CLEAR_TABLE_ON_START.toLowerCase() === "true";
 export default async function() {
   console.log("Hello from start");
 
-  if (CLEAR_TABLE_ON_START && await db.schema.hasTable(TABLE_NAME)) {
-    console.log(`Table "${TABLE_NAME}" exists and CLEAR_TABLE_ON_START is set to true, clearing table...`);
-    await db(TABLE_NAME).delete();
-    console.log(`Table ${TABLE_NAME} cleared`);
+  if (CLEAR_TABLE_ON_START) {
+    console.info("CLEAR_TABLE_ON_START tag detected! dropping table if it exists...");
+    await db.schema.dropTableIfExists(TABLE_NAME);
+    console.info(`Table ${TABLE_NAME} dropped!`);
   }
 }

@@ -33,8 +33,10 @@ export default async function(input: Input) {
     console.error("Schema is empty");
     return;
   }
-  if (!await db.schema.hasTable(TABLE_NAME)) {
-    console.warn(`Table ${TABLE_NAME} does not exist, creating it now...`);
+
+  const tableMissing = !await db.schema.hasTable(TABLE_NAME);
+  if (tableMissing) {
+    console.info(`Table "${TABLE_NAME}" does not exist! creating it now...`);
     await createTable(TABLE_NAME, schema.value);
   }
 
@@ -50,6 +52,7 @@ export default async function(input: Input) {
     }
 
     if (typeof entry === "object") {
+      console.debug(`Converting ${finalName} to JSON`);
       finalPayload[name] = JSON.stringify(entry);
       continue;
     }
