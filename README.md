@@ -1,6 +1,12 @@
-# NodeJS Typescript Transformer Example Repository
+# Typescript Postgres Insertion Transformer
 
-This repository contains a simple example of a NodeJS Typescript Transformer.
+All this transformer does is look at the incoming data and insert it into a postgres database.
+You can fine tune which data you are interested in by providing the environment variables demonstrated in
+the `.env.example` file.
+
+------
+
+# Template boilerplate code:
 
 ## Entrypoint
 
@@ -156,7 +162,9 @@ The shell will then download the artifact, run it and for each data point post t
 
 ## Migrate from v1 to v2
 
-The v2 of the transformer shell work differently from v1. The main difference is that the v2 shell loads from a config file rather than through en endpoint. This means that the transformer shell needs to be updated to use the new config file.
+The v2 of the transformer shell work differently from v1. The main difference is that the v2 shell loads from a config
+file rather than through en endpoint. This means that the transformer shell needs to be updated to use the new config
+file.
 
 ### 1. Update the transformer shell docker compose file
 
@@ -166,34 +174,34 @@ change the `transformer` service in the `docker-compose.yaml` file to use the ne
 version: "3.8"
 
 services:
-   shell:
-      container_name: transformer-shell
-      image: flowcoreio/adapter-nodejs-transformer-shell:2.1.0
-      ports:
-         - "3001:3001"
-         - "10000:10000"
-      environment:
-         LOG_LEVEL: debug
-         LOG_PRETTY_PRINT: "true"
-         TRANSFORMERS: node
-         PORT: 3001
-         TRANSFORMER_DEV_MODE: "true"
-      volumes:
-         - ./../../dist:/app/transformers/test-transformer
-         - ./../config:/usr/src/app/transformer
+  shell:
+    container_name: transformer-shell
+    image: flowcoreio/adapter-nodejs-transformer-shell:2.1.0
+    ports:
+      - "3001:3001"
+      - "10000:10000"
+    environment:
+      LOG_LEVEL: debug
+      LOG_PRETTY_PRINT: "true"
+      TRANSFORMERS: node
+      PORT: 3001
+      TRANSFORMER_DEV_MODE: "true"
+    volumes:
+      - ./../../dist:/app/transformers/test-transformer
+      - ./../config:/usr/src/app/transformer
 ```
 
 add a new transformer.json configuration file at `test/config/transformer.json` with the following content:
 
 ```json
 {
-   "name": "test-transformer",
-   "version": "1.0.0",
-   "runtime": "node",
-   "artifactUrl": "/app/transformers/test-transformer",
-   "entrypoint": "main.js",
-   "startTimeTimeout": 10000,
-   "port": 10000
+  "name": "test-transformer",
+  "version": "1.0.0",
+  "runtime": "node",
+  "artifactUrl": "/app/transformers/test-transformer",
+  "entrypoint": "main.js",
+  "startTimeTimeout": 10000,
+  "port": 10000
 }
 ```
 
@@ -217,27 +225,28 @@ replace the try catch block that loads the transformer with the following code:
 
 ```typescript
 await waitForExpect(async () => {
-console.debug(`Checking if transformer is loaded on http://localhost:${adapterPort}/health`);
-const axiosResponse = await axios.get(
-        `http://localhost:${adapterPort}/health`,
-);
+  console.debug(`Checking if transformer is loaded on http://localhost:${adapterPort}/health`);
+  const axiosResponse = await axios.get(
+    `http://localhost:${adapterPort}/health`,
+  );
 
-if (axiosResponse.status !== 200) {
-   console.debug(`Transformer not loaded on http://localhost:${adapterPort}/health`, axiosResponse.data);
-}
+  if (axiosResponse.status !== 200) {
+    console.debug(`Transformer not loaded on http://localhost:${adapterPort}/health`, axiosResponse.data);
+  }
 
-expect(axiosResponse.status).toEqual(200);
+  expect(axiosResponse.status).toEqual(200);
 }, 10000, 1000);
 ```
 
 3. remove all references to processId
 
-remove the `processId` let variable and the `processId` from the `axios.post` call. This is the simplified version of the `axios.post` call:
+remove the `processId` let variable and the `processId` from the `axios.post` call. This is the simplified version of
+the `axios.post` call:
 
 ```typescript
 const processedResult = await axios.post(
-        "http://localhost:3001/transform",
-        data,
+  "http://localhost:3001/transform",
+  data,
 );
 ```
 
@@ -245,6 +254,6 @@ const processedResult = await axios.post(
 
 ```typescript
 afterAll(async () => {
-    server.close();
-  });
+  server.close();
+});
 ```
