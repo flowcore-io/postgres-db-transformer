@@ -1,0 +1,63 @@
+name: Build and Publish Artifact
+
+on:
+  release:
+    types: [ published ]
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Extract version from package.json
+        uses: sergeysova/jq-action@v2
+        id: version
+        with:
+          cmd: 'jq .version package.json -r'
+
+      - name: Show my version
+        run: 'echo "version ${{ steps.version.outputs.value }}"'
+
+      - name: Extract package name from package.json
+        uses: sergeysova/jq-action@v2
+        id: package
+        with:
+          cmd: 'jq .name package.json -r'
+
+      - name: Show package name
+        run: 'echo "version ${{ steps.package.outputs.value }}"'
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.5.1
+        with:
+          node-version: "${{ env.NODE_VERSION }}"
+          cache: yarn
+      - name: Yarn install
+        run: |
+          yarn install --frozen-lockfile
+      - name: Lint
+        run: yarn lint
+      - name: Build Artifact
+        run: |
+          yarn build
+          yarn install --frozen-lockfile --production --modules-folder dist/node_modules
+          rm dist/package.json
+
+      - name: Compress Artifact
+        run: zip -r ${{ steps.package.outputs.value }}-${{ steps.version.outputs.value }}.zip .
+        working-directory: dist
+
+      - name: Upload artifact and release
+        uses: nanoufo/action-upload-artifacts-and-release-assets@main
+        with:
+          path: |
+            dist/${{ steps.package.outputs.value }}-${{ steps.version.outputs.value }}.zip
+          upload-release-files: true
+          release-upload-url: ${{ github.event.release.upload_url }}
