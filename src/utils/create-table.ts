@@ -36,8 +36,7 @@ export async function createTable(tableName: string, schema: TableSchema) {
         console.error(`Unknown type ${value.type} for key ${key}`);
         continue;
       }
-
-      console.log("dog", factory);
+      
       factory(table, key);
     }
   });
