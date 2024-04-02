@@ -1,0 +1,24 @@
+on:
+  push:
+    branches:
+      - main
+
+name: release-please
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Extract package name from package.json
+        uses: sergeysova/jq-action@v2
+        id: package
+        with:
+          cmd: 'jq .name package.json -r'
+
+      - name: Show package name
+        run: 'echo "version ${{ steps.package.outputs.value }}"'
+      - uses: google-github-actions/release-please-action@v3
+        with:
+          token: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+          release-type: node
+          package-name: ${{ steps.package.outputs.value }}
