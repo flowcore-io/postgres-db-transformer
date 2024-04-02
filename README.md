@@ -4,6 +4,83 @@ All this transformer does is look at the incoming data and insert it into a post
 You can fine tune which data you are interested in by providing the environment variables demonstrated in
 the `.env.example` file.
 
+## Schema Structure
+
+When you specify a schema, the transformer will create a table with the specified schema, as well as attempt to fill
+that table with the appropriate values from the `input`.
+
+The currently supported schema values are as follows:
+
+```json
+{
+  "userId": {
+    "type": "string",
+    "mapFrom": "id"
+  },
+  "user": {
+    "type": "jsonb"
+  },
+  "submissionId": {
+    "type": "string"
+  }
+}
+```
+
+The initial value (e.g. `userId`), is the db column name. The sub objects relates to properties associated with that
+column.
+
+> __BINARY 64 ENCODING__: When you set the `TABLE_SCHEMA_BASE64` environment variable, you need to remember to encode
+> the schema to base64. This is because the transformer will decode the schema before using it.
+
+### `type`
+
+The type of the column. This can be any of the following:
+
+- `text`
+- `string`
+- `integer`
+- `decimal`
+- `boolean`
+- `json`
+- `jsonb`
+- `uuid`
+- `timestamp`
+- `binary`
+- `bigInteger`
+- `float`
+- `double`
+- `increments`
+- `time`
+- `date`
+- `dateTime`
+
+Failure to provide one of these types, results in the column being __ignored during creation__.
+
+> __WHEN NO SCHEMA IS PROVIDED__: If you do not specify a schema, then the transformer will do its best to generate one
+> for you based on
+> the `input` data. Keep in mind, that the auto generated schema is not at all optimised for performance, and should
+> only be used during testing.
+
+### `mapFrom`
+
+Will map the value from the `input` to the specified column.
+For example:
+
+```json
+{
+  "userId": {
+    "type": "string",
+    "mapFrom": "id"
+  }
+}
+```
+
+assumes that the `input` has a property `id`, and will insert that value into the `userId` column.
+
+> __WHEN `mapfrom` IS NOT FOUND ON THE INPUT__: If the mapFrom value is not found on the input, then the transformer
+> will assume that the value is not present, and ignore it.
+
+
 ------
 
 # Template boilerplate code:
