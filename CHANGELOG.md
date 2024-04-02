@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.1.0...v1.1.1) (2024-04-02)
+
+
+### Bug Fixes
+
+* upgrades decimal type to double if it exceeds the decimal limit ([b9a8b0f](https://github.com/flowcore-io/postgres-db-transformer/commit/b9a8b0f26f29d2eb5534c2de4e757118fe091b8b))
+
 ## [1.1.0](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.0.1...v1.1.0) (2024-04-02)
 
 
