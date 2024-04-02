@@ -30,8 +30,10 @@ function generateSchemaFromInput(input: object): TableSchema {
         break;
       case "object":
         schema[key] = { type: "json" };
+        break;
       default:
         schema[key] = { type: "text" };
+        break;
     }
   }
   return schema;
