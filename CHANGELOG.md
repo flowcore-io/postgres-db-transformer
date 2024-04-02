@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.0.0...v1.0.1) (2024-04-02)
+
+
+### Bug Fixes
+
+* corrected package name ([7f50911](https://github.com/flowcore-io/postgres-db-transformer/commit/7f509119355957a4450db6b4b458a0fcae0dd42a))
+
 ## 1.0.0 (2024-04-02)
 
 
