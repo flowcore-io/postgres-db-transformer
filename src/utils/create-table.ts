@@ -2,6 +2,8 @@ import { TableSchema } from "../contracts/tableSchema";
 import { db } from "../db";
 import { Knex } from "knex";
 
+
+// todo: adjust this code to be more context aware once we support multiple dbs (e.g. not all dbs support json, so instead, it would be stringified and stored as a text or string)
 const COLUMN_FACTORY: TableMapper = {
   "text": (table: Knex.CreateTableBuilder, key: string) => table.text(key).nullable(),
   "string": (table: Knex.CreateTableBuilder, key: string) => table.string(key).nullable(),
