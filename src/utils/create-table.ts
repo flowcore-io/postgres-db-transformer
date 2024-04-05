@@ -15,13 +15,13 @@ const COLUMN_FACTORY: TableMapper = {
   "uuid": (table: Knex.CreateTableBuilder, key: string) => table.uuid(key).nullable(),
   "timestamp": (table: Knex.CreateTableBuilder, key: string) => table.timestamp(key).nullable(),
   "binary": (table: Knex.CreateTableBuilder, key: string) => table.binary(key).nullable(),
-  "bigInteger": (table: Knex.CreateTableBuilder, key: string) => table.bigInteger(key).nullable(),
+  "biginteger": (table: Knex.CreateTableBuilder, key: string) => table.bigInteger(key).nullable(),
   "float": (table: Knex.CreateTableBuilder, key: string) => table.float(key).nullable(),
   "double": (table: Knex.CreateTableBuilder, key: string) => table.double(key).nullable(),
   "increments": (table: Knex.CreateTableBuilder, key: string) => table.increments(key).nullable(),
   "time": (table: Knex.CreateTableBuilder, key: string) => table.time(key).nullable(),
   "date": (table: Knex.CreateTableBuilder, key: string) => table.date(key).nullable(),
-  "dateTime": (table: Knex.CreateTableBuilder, key: string) => table.dateTime(key).nullable(),
+  "datetime": (table: Knex.CreateTableBuilder, key: string) => table.datetime(key).nullable(),
 };
 
 export async function createTable(tableName: string, schema: TableSchema) {
