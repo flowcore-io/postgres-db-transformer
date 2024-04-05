@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.1.1...v1.1.2) (2024-04-05)
+
+
+### Bug Fixes
+
+* now able to construct big integer and date time as expected ([2ed70ea](https://github.com/flowcore-io/postgres-db-transformer/commit/2ed70eaa90af24888371c1590266287ae83eafcf))
+
 ## [1.1.1](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.1.0...v1.1.1) (2024-04-02)
 
 
