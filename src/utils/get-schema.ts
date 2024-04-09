@@ -15,6 +15,7 @@ export function getSchema<T extends object>(schemaString: string | undefined, fa
   if (schemaString) {
     return jsonTryParse<TableSchema>(schemaString);
   }
+
   console.info("No schema provided, generating schema from input");
 
   return {
@@ -22,6 +23,24 @@ export function getSchema<T extends object>(schemaString: string | undefined, fa
     error: null,
   };
 }
+
+export function tryExtendSchemaWithKeyValue(schema: TableSchema, key: string, value: unknown, definition?: Partial<ColumnDefinition>): TableSchema {
+  if (value === undefined) {
+    console.warn(`Value associated with key "${key}" was undefined, skipping...`);
+    return schema;
+  }
+
+  const schemaSubject = generateSchemaFromInput({ [key]: value });
+
+  console.info(schemaSubject[key], definition);
+
+  if (definition) {
+    schemaSubject[key] = { ...schemaSubject[key], ...definition };
+  }
+
+  return { ...schema, ...schemaSubject };
+}
+
 
 function generateSchemaFromInput(input: object): TableSchema {
   const schema: TableSchema = {};
@@ -36,7 +55,6 @@ function generateSchemaFromInput(input: object): TableSchema {
   }
   return schema;
 }
-
 
 function precisionBelowDouble(value: number): boolean {
   // note: if the value exceeds the decimal limit the db will throw this error:
