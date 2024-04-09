@@ -16,6 +16,7 @@ export interface Input<T = any> {
   payload: T;
 }
 
+const MATCH_KEY = env.MATCH_KEY;
 const TABLE_NAME = env.TABLE_NAME;
 const TABLE_SCHEMA = env.TABLE_SCHEMA_BASE64 && base64Decode(env.TABLE_SCHEMA_BASE64);
 
@@ -60,11 +61,17 @@ export default async function(input: Input) {
     finalPayload[name] = entry;
   }
 
-  const result = await db(TABLE_NAME).insert(finalPayload);
-  if (result.length <= 0) {
-    console.error("Failed to insert data");
+  if(MATCH_KEY){
+    const result = await db(TABLE_NAME).insert(finalPayload).onConflict(MATCH_KEY).merge(finalPayload);
+    if (result.length <= 0) {
+      console.error("Failed to update data");
+    }
+  }else{
+    const result = await db(TABLE_NAME).insert(finalPayload);
+    if (result.length <= 0) {
+      console.error("Failed to insert data");
+    }
   }
 
-  console.info("data inserted");
   return finalPayload;
 }
