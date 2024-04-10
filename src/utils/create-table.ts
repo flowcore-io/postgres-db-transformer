@@ -39,13 +39,17 @@ export async function createTable(tableName: string, schema: TableSchema) {
         continue;
       }
 
-      factory(table, key);
+      const builder = factory(table, key);
+      if (value.primary) {
+        builder.primary();
+      }
+
     }
   });
   console.info(`Table ${tableName} created successfully.`);
 }
 
 type TableMapper = {
-  [key: string]: (table: Knex.CreateTableBuilder, key: string) => void
+  [key: string]: (table: Knex.CreateTableBuilder, key: string) => Knex.ColumnBuilder
 };
 

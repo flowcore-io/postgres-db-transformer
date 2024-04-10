@@ -8,7 +8,7 @@ import { env } from "../env";
 import { db } from "../db";
 import { base64Decode } from "../utils/base-64-decode";
 import { createTable } from "../utils/create-table";
-import { getSchema } from "../utils/get-schema";
+import { getSchema, tryExtendSchemaWithKeyValue } from "../utils/get-schema";
 
 export interface Input<T = any> {
   eventId: string;
@@ -16,6 +16,7 @@ export interface Input<T = any> {
   payload: T;
 }
 
+const MATCH_KEY = env.MATCH_KEY;
 const TABLE_NAME = env.TABLE_NAME;
 const TABLE_SCHEMA = env.TABLE_SCHEMA_BASE64 && base64Decode(env.TABLE_SCHEMA_BASE64);
 
@@ -34,15 +35,27 @@ export default async function(input: Input) {
     return;
   }
 
+
+  let finalSchema = schema.value;
+  if (MATCH_KEY) {
+    finalSchema = tryExtendSchemaWithKeyValue(
+      finalSchema,
+      MATCH_KEY,
+      combinedPayload[MATCH_KEY],
+      { primary: true },
+    );
+  }
+
+
   const tableMissing = !await db.schema.hasTable(TABLE_NAME);
   if (tableMissing) {
     console.info(`Table "${TABLE_NAME}" does not exist! creating it now...`);
-    await createTable(TABLE_NAME, schema.value);
+    await createTable(TABLE_NAME, finalSchema);
   }
 
   // Process the payload to match the schema
   const finalPayload: Record<string, unknown> = {};
-  for (const [name, value] of Object.entries(schema.value)) {
+  for (const [name, value] of Object.entries(finalSchema)) {
 
     const finalName = value.mapFrom || name;
     const entry = combinedPayload[finalName];
@@ -60,11 +73,17 @@ export default async function(input: Input) {
     finalPayload[name] = entry;
   }
 
-  const result = await db(TABLE_NAME).insert(finalPayload);
-  if (result.length <= 0) {
-    console.error("Failed to insert data");
+  if (MATCH_KEY) {
+    const result = await db(TABLE_NAME).insert(finalPayload).onConflict(MATCH_KEY).merge(finalPayload);
+    if (result.length <= 0) {
+      console.error("Failed to update data");
+    }
+  } else {
+    const result = await db(TABLE_NAME).insert(finalPayload);
+    if (result.length <= 0) {
+      console.error("Failed to insert data");
+    }
   }
 
-  console.info("data inserted");
   return finalPayload;
 }
