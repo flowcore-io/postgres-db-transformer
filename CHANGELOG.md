@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.0](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.1.2...v1.2.0) (2024-04-10)
+
+
+### Features
+
+* Extended MATCH_KEY to auto populate associated column as primary column ([58b1589](https://github.com/flowcore-io/postgres-db-transformer/commit/58b158988c98d43ecefcaa000a05b317fbfffdc5))
+* Extended table and schema definition to support primary keys ([1dc8356](https://github.com/flowcore-io/postgres-db-transformer/commit/1dc835639f421297dd537f30125accfd734c1b28))
+* Update record functionality with unique keys ([5cc8c6a](https://github.com/flowcore-io/postgres-db-transformer/commit/5cc8c6a45af55275f3bd200ff194ef3618d0cf00))
+
 ## [1.1.2](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.1.1...v1.1.2) (2024-04-05)
 
 
