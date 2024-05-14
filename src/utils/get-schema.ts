@@ -32,7 +32,6 @@ export function tryExtendSchemaWithKeyValue(schema: TableSchema, key: string, va
 
   const schemaSubject = generateSchemaFromInput({ [key]: value });
 
-  console.info(schemaSubject[key], definition);
 
   if (definition) {
     schemaSubject[key] = { ...schemaSubject[key], ...definition };
@@ -48,7 +47,7 @@ function generateSchemaFromInput(input: object): TableSchema {
 
     const factory = AUTO_SCHEMA_FACTORY[typeof value];
     if (!factory) {
-      schema[key] = { type: "text" };
+      schema[key] = { type: "text", required: false };
     }
 
     schema[key] = factory(value);
