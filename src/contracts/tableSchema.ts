@@ -6,4 +6,5 @@ export type ColumnDefinition = {
   type: string;
   mapFrom?: string;
   primary?: boolean;
+  required?: boolean;
 }

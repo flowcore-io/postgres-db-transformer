@@ -59,7 +59,7 @@ export default async function(input: Input) {
 
     const finalName = value.mapFrom || name;
     const entry = combinedPayload[finalName];
-    if (!entry) {
+    if (!entry && value.required) {
       console.warn(`Missing entry for ${finalName}`);
       continue;
     }
