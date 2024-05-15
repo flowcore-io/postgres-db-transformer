@@ -1,5 +1,6 @@
 import { ColumnDefinition, TableSchema } from "../contracts/tableSchema";
 import { jsonTryParse, JsonTryParseResult } from "./json-try-parse";
+import { Logger } from "./logger";
 
 const AUTO_SCHEMA_FACTORY: Record<string, (value: unknown) => ColumnDefinition> = {
   "string": () => ({ type: "string" }),
@@ -16,7 +17,7 @@ export function getSchema<T extends object>(schemaString: string | undefined, fa
     return jsonTryParse<TableSchema>(schemaString);
   }
 
-  console.info("No schema provided, generating schema from input");
+  Logger.info("No schema provided, generating schema from input");
 
   return {
     value: generateSchemaFromInput(fallbackObject),
@@ -26,7 +27,7 @@ export function getSchema<T extends object>(schemaString: string | undefined, fa
 
 export function tryExtendSchemaWithKeyValue(schema: TableSchema, key: string, value: unknown, definition?: Partial<ColumnDefinition>): TableSchema {
   if (value === undefined) {
-    console.warn(`Value associated with key "${key}" was undefined, skipping...`);
+    Logger.warn(`Value associated with key "${key}" was undefined, skipping...`);
     return schema;
   }
 
