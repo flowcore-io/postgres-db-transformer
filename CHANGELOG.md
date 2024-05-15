@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.2.1...v1.3.0) (2024-05-15)
+
+
+### Features
+
+* Added a generic logger ([51d8778](https://github.com/flowcore-io/postgres-db-transformer/commit/51d877890e52e05aa20ea316e3de3cd9bc5409c3))
+
 ## [1.2.1](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.2.0...v1.2.1) (2024-05-15)
 
 
