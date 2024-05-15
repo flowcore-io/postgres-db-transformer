@@ -11,6 +11,7 @@ export const envSchema = z.object({
   TABLE_SCHEMA_BASE64: z.string().optional().default(""),
   CLEAR_TABLE_ON_START: z.string().default("false"),
   MATCH_KEY: z.string().optional().default(""),
+  CONVERT_VALUES: z.string().optional().default("false"),
 });
 
 export const env = envSchema.parse(process.env);
