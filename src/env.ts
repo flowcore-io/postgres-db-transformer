@@ -12,6 +12,7 @@ export const envSchema = z.object({
   CLEAR_TABLE_ON_START: z.string().default("false"),
   MATCH_KEY: z.string().optional().default(""),
   CONVERT_VALUES: z.string().optional().default("false"),
+  LOG_LEVEL: z.string().optional().default("INFO"),
 });
 
 export const env = envSchema.parse(process.env);
