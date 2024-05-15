@@ -21,7 +21,7 @@ const TABLE_NAME = env.TABLE_NAME;
 const TABLE_SCHEMA = env.TABLE_SCHEMA_BASE64 && base64Decode(env.TABLE_SCHEMA_BASE64);
 
 export default async function(input: Input) {
-  console.info(`Received event ${input.eventId}, with payload ${JSON.stringify(input.payload)} and valid time ${input.validTime}`);
+  console.debug(`Received event ${input.eventId}, with payload ${JSON.stringify(input.payload)} and valid time ${input.validTime}`);
 
   const combinedPayload = { eventid: input.eventId, validTime: input.validTime, ...input.payload };
 
