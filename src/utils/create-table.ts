@@ -1,6 +1,7 @@
 import { TableSchema } from "../contracts/tableSchema";
 import { db } from "../db";
 import { Knex } from "knex";
+import { Logger } from "./logger";
 
 
 // todo: adjust this code to be more context aware once we support multiple dbs (e.g. not all dbs support json, so instead, it would be stringified and stored as a text or string)
@@ -29,13 +30,13 @@ export async function createTable(tableName: string, schema: TableSchema) {
     for (const [key, value] of Object.entries(schema)) {
 
       if (!value.type) {
-        console.error(`Type missing for key ${key}`);
+        Logger.error(`Type missing for key ${key}`);
         continue;
       }
 
       const factory = COLUMN_FACTORY[value.type.toLowerCase()];
       if (!factory) {
-        console.error(`Unknown type ${value.type} for key ${key}`);
+        Logger.error(`Unknown type ${value.type} for key ${key}`);
         continue;
       }
 
@@ -46,7 +47,7 @@ export async function createTable(tableName: string, schema: TableSchema) {
 
     }
   });
-  console.info(`Table ${tableName} created successfully.`);
+  Logger.info(`Table ${tableName} created successfully.`);
 }
 
 type TableMapper = {
