@@ -19,6 +19,7 @@ export interface Input<T = any> {
 const MATCH_KEY = env.MATCH_KEY;
 const TABLE_NAME = env.TABLE_NAME;
 const TABLE_SCHEMA = env.TABLE_SCHEMA_BASE64 && base64Decode(env.TABLE_SCHEMA_BASE64);
+const CONVERT_VALUES = env.CONVERT_VALUES;
 
 export default async function(input: Input) {
   console.debug(`Received event ${input.eventId}, with payload ${JSON.stringify(input.payload)} and valid time ${input.validTime}`);
@@ -64,12 +65,22 @@ export default async function(input: Input) {
       continue;
     }
 
+
     if (typeof entry === "object") {
       console.debug(`Converting ${finalName} to JSON`);
       finalPayload[name] = JSON.stringify(entry);
       continue;
     }
-
+    if(CONVERT_VALUES === "true" &&  value.type === "integer") {
+      try {
+        console.debug(`Converting ${finalName} to integer`);
+        finalPayload[name] = parseInt(entry, 10);
+      }catch (e) {
+        console.error(`Failed to convert ${finalName} to integer, setting to null`);
+        finalPayload[name] = null;
+      }
+      continue;
+    }
     finalPayload[name] = entry;
   }
 
