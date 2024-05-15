@@ -6,6 +6,7 @@ import express, {Request, Response} from "express";
 import health from "@functions/health.entrypoint";
 import transform from "@functions/transform.entrypoint";
 import start from "@functions/start.entrypoint";
+import { Logger } from "./utils/logger";
 
 const app = express();
 
@@ -30,10 +31,10 @@ const run = async (): Promise<void> => {
   try {
     await start();
     app.listen(port, () => {
-      console.log(`Server started on port ${port}`);
+      Logger.info(`Server started on port ${port}`);
     });
   } catch (error) {
-    console.error(error);
+    Logger.error(error);
     process.exit(1);
   }
 };

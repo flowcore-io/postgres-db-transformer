@@ -9,6 +9,8 @@ import { db } from "../db";
 import { base64Decode } from "../utils/base-64-decode";
 import { createTable } from "../utils/create-table";
 import { getSchema, tryExtendSchemaWithKeyValue } from "../utils/get-schema";
+import { Logger } from "../utils/logger";
+
 
 export interface Input<T = any> {
   eventId: string;
@@ -22,17 +24,17 @@ const TABLE_SCHEMA = env.TABLE_SCHEMA_BASE64 && base64Decode(env.TABLE_SCHEMA_BA
 const CONVERT_VALUES = env.CONVERT_VALUES;
 
 export default async function(input: Input) {
-  console.debug(`Received event ${input.eventId}, with payload ${JSON.stringify(input.payload)} and valid time ${input.validTime}`);
+  Logger.debug(`Received event ${input.eventId}, with payload ${JSON.stringify(input.payload)} and valid time ${input.validTime}`);
 
   const combinedPayload = { eventid: input.eventId, validTime: input.validTime, ...input.payload };
 
   const schema = getSchema(TABLE_SCHEMA, combinedPayload);
   if (schema.error) {
-    console.error("Failed to parse schema:", schema.error);
+    Logger.error("Failed to parse schema:", schema.error);
     return;
   }
   if (!schema.value) {
-    console.error("Schema is empty");
+    Logger.error("Schema is empty");
     return;
   }
 
@@ -50,7 +52,7 @@ export default async function(input: Input) {
 
   const tableMissing = !await db.schema.hasTable(TABLE_NAME);
   if (tableMissing) {
-    console.info(`Table "${TABLE_NAME}" does not exist! creating it now...`);
+    Logger.info(`Table "${TABLE_NAME}" does not exist! creating it now...`);
     await createTable(TABLE_NAME, finalSchema);
   }
 
@@ -61,22 +63,23 @@ export default async function(input: Input) {
     const finalName = value.mapFrom || name;
     const entry = combinedPayload[finalName];
     if (!entry && value.required) {
-      console.warn(`Missing entry for ${finalName}`);
+      Logger.warn(`Missing entry for ${finalName}`);
       continue;
     }
 
 
+
     if (typeof entry === "object") {
-      console.debug(`Converting ${finalName} to JSON`);
+      Logger.debug(`Converting ${finalName} to JSON`);
       finalPayload[name] = JSON.stringify(entry);
       continue;
     }
     if(CONVERT_VALUES === "true" &&  value.type === "integer") {
       try {
-        console.debug(`Converting ${finalName} to integer`);
+        Logger.debug(`Converting ${finalName} to integer`);
         finalPayload[name] = parseInt(entry, 10);
       }catch (e) {
-        console.error(`Failed to convert ${finalName} to integer, setting to null`);
+        Logger.error(`Failed to convert ${finalName} to integer, setting to null`);
         finalPayload[name] = null;
       }
       continue;
@@ -87,12 +90,12 @@ export default async function(input: Input) {
   if (MATCH_KEY) {
     const result = await db(TABLE_NAME).insert(finalPayload).onConflict(MATCH_KEY).merge(finalPayload);
     if (result.length <= 0) {
-      console.error("Failed to update data");
+      Logger.error("Failed to update data");
     }
   } else {
     const result = await db(TABLE_NAME).insert(finalPayload);
     if (result.length <= 0) {
-      console.error("Failed to insert data");
+      Logger.error("Failed to insert data");
     }
   }
 
