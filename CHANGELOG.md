@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.1](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.2.0...v1.2.1) (2024-05-15)
+
+
+### Bug Fixes
+
+* Added required config ([7ac09c8](https://github.com/flowcore-io/postgres-db-transformer/commit/7ac09c8009cf6424f142596e363cea4bc7f7864a))
+* COnvert integers ([074b2da](https://github.com/flowcore-io/postgres-db-transformer/commit/074b2dae6885f769cee3130a1421944059d58f68))
+* Made less verbose ([8663e65](https://github.com/flowcore-io/postgres-db-transformer/commit/8663e65cd07ca55c818604c06def4f8c73674337))
+
 ## [1.2.0](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.1.2...v1.2.0) (2024-04-10)
 
 
