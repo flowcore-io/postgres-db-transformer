@@ -76,8 +76,13 @@ export default async function(input: Input) {
     }
     if(CONVERT_VALUES === "true" &&  value.type === "integer") {
       try {
-        Logger.debug(`Converting ${finalName} to integer`);
+        if(entry === null || entry === undefined){
+          finalPayload[name] = null;
+          continue;
+        }
         finalPayload[name] = parseInt(entry, 10);
+        Logger.debug(`Converting ${finalName} to integer '${entry}' -> '${finalPayload[name] }'` );
+
       }catch (e) {
         Logger.error(`Failed to convert ${finalName} to integer, setting to null`);
         finalPayload[name] = null;
