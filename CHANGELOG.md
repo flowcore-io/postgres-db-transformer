@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.3.0...v1.3.1) (2024-06-27)
+
+
+### Bug Fixes
+
+* NaN bug ([bc43230](https://github.com/flowcore-io/postgres-db-transformer/commit/bc43230c68bb1a6dea703f0e47c0e47bc89e00f7))
+
 ## [1.3.0](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.2.1...v1.3.0) (2024-05-15)
 
 
