@@ -13,6 +13,7 @@ export const envSchema = z.object({
   MATCH_KEY: z.string().optional().default(""),
   CONVERT_VALUES: z.string().optional().default("false"),
   LOG_LEVEL: z.string().optional().default("INFO"),
+  REQUIRE_VALUE_SET_PATH: z.string().optional().default(""),
 });
 
 export const env = envSchema.parse(process.env);
