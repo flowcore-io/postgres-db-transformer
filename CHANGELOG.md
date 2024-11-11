@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.3.1...v1.4.0) (2024-11-11)
+
+
+### Features
+
+* Added possibility to require that a field is set ([142e979](https://github.com/flowcore-io/postgres-db-transformer/commit/142e979c1fc8cffda2908eebb94972dc45046a47))
+
 ## [1.3.1](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.3.0...v1.3.1) (2024-06-27)
 
 
