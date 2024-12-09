@@ -10,6 +10,7 @@ import { base64Decode } from "../utils/base-64-decode";
 import { createTable } from "../utils/create-table";
 import { getSchema, tryExtendSchemaWithKeyValue } from "../utils/get-schema";
 import { Logger } from "../utils/logger";
+import { get } from "radash";
 
 
 export interface Input<T = any> {
@@ -61,13 +62,11 @@ export default async function(input: Input) {
   for (const [name, value] of Object.entries(finalSchema)) {
 
     const finalName = value.mapFrom || name;
-    const entry = combinedPayload[finalName];
+    const entry = get(combinedPayload, finalName);
     if (!entry && value.required) {
       Logger.warn(`Missing entry for ${finalName}`);
       continue;
     }
-
-
 
     if (typeof entry === "object") {
       Logger.debug(`Converting ${finalName} to JSON`);
@@ -80,7 +79,7 @@ export default async function(input: Input) {
           finalPayload[name] = null;
           continue;
         }
-        finalPayload[name] = parseInt(entry, 10);
+        finalPayload[name] = parseInt(entry.toString(), 10);
         Logger.debug(`Converting ${finalName} to integer '${entry}' -> '${finalPayload[name] }'` );
 
       }catch (e) {
