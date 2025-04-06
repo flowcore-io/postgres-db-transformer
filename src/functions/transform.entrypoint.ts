@@ -35,7 +35,7 @@ export default async function(input: Input) {
     return;
   }
   if (!schema.value) {
-    Logger.error("Schema is empty");
+    Logger.error("Schema is empty.");
     return;
   }
 
