@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.3](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.4.2...v1.4.3) (2025-04-06)
+
+
+### Bug Fixes
+
+* **workflows:** :sparkles: Upgrade upload-artifact action to v4 ([004d039](https://github.com/flowcore-io/postgres-db-transformer/commit/004d039a04079fbbe559207b1efb76b38d72f584))
+
 ## [1.4.2](https://github.com/flowcore-io/postgres-db-transformer/compare/v1.4.1...v1.4.2) (2025-04-06)
 
 
