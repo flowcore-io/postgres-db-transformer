@@ -54,10 +54,20 @@ jobs:
         run: zip -r ${{ steps.package.outputs.value }}-${{ steps.version.outputs.value }}.zip .
         working-directory: dist
 
-      - name: Upload artifact and release
-        uses: nanoufo/action-upload-artifacts-and-release-assets@main
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
         with:
-          path: |
-            dist/${{ steps.package.outputs.value }}-${{ steps.version.outputs.value }}.zip
-          upload-release-files: true
-          release-upload-url: ${{ github.event.release.upload_url }}
+          name: postgres-db-transformer-${{ steps.version.outputs.value }}
+          path: dist/${{ steps.package.outputs.value }}-${{ steps.version.outputs.value }}.zip
+      
+      - name: Upload Release Asset
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: dist/${{ steps.package.outputs.value }}-${{ steps.version.outputs.value }}.zip
+          asset_name: ${{ steps.package.outputs.value }}-${{ steps.version.outputs.value }}.zip
+          asset_content_type: application/zip
+      
