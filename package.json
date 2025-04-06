@@ -1,6 +1,6 @@
 {
   "name": "postgres-db-transformer",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "",
   "main": "main.js",
   "scripts": {
