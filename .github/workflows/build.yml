@@ -55,7 +55,7 @@ jobs:
         working-directory: dist
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: postgres-db-transformer-${{ steps.version.outputs.value }}
           path: dist/${{ steps.package.outputs.value }}-${{ steps.version.outputs.value }}.zip
