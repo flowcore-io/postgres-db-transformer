@@ -10,6 +10,7 @@ import { base64Decode } from "../utils/base-64-decode";
 import { createTable } from "../utils/create-table";
 import { getSchema, tryExtendSchemaWithKeyValue } from "../utils/get-schema";
 import { Logger } from "../utils/logger";
+import { get } from "lodash";
 
 
 export interface Input<T = any> {
@@ -27,7 +28,7 @@ export default async function(input: Input) {
   Logger.debug(`Received event ${input.eventId}, with payload ${JSON.stringify(input.payload)} and valid time ${input.validTime}`);
 
   const combinedPayload = { eventid: input.eventId, validTime: input.validTime, ...input.payload };
-
+  
   const schema = getSchema(TABLE_SCHEMA, combinedPayload);
   if (schema.error) {
     Logger.error("Failed to parse schema:", schema.error);
@@ -44,8 +45,8 @@ export default async function(input: Input) {
     finalSchema = tryExtendSchemaWithKeyValue(
       finalSchema,
       MATCH_KEY,
-      combinedPayload[MATCH_KEY],
-      { primary: true },
+      finalSchema[MATCH_KEY].mapFrom ? get(combinedPayload, finalSchema[MATCH_KEY].mapFrom):  combinedPayload[MATCH_KEY],
+      { primary: true,  mapFrom: finalSchema[MATCH_KEY]?.mapFrom },
     );
   }
 
@@ -61,7 +62,7 @@ export default async function(input: Input) {
   for (const [name, value] of Object.entries(finalSchema)) {
 
     const finalName = value.mapFrom || name;
-    const entry = combinedPayload[finalName];
+    const entry = get(combinedPayload, finalName);
     if (!entry && value.required) {
       Logger.warn(`Missing entry for ${finalName}`);
       continue;
@@ -80,7 +81,7 @@ export default async function(input: Input) {
           finalPayload[name] = null;
           continue;
         }
-        finalPayload[name] = parseInt(entry, 10);
+        finalPayload[name] = Number.parseInt(entry, 10);
         Logger.debug(`Converting ${finalName} to integer '${entry}' -> '${finalPayload[name] }'` );
 
       }catch (e) {
